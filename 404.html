@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
+    <title>404</title>
+    <style>
+        :root {
+            --bg-color: #fdfaf6;
+            --main-color: #4e342e;
+            --accent-color: #d4a373;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--main-color);
+            font-family: 'Noto Sans', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            max-width: 600px;
+        }
+
+        .steam-container {
+            height: 50px;
+            position: relative;
+        }
+
+        .steam {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            opacity: 0;
+            animation: steam-float 4s ease-in-out infinite;
+        }
+
+        @keyframes steam-float {
+            0% { transform: translate(-50%, 0) scale(1); opacity: 0; }
+            30% { opacity: 0.6; }
+            100% { transform: translate(-40%, -40px) scale(1.5); opacity: 0; }
+        }
+
+        .cup-svg {
+            margin-bottom: 20px;
+            fill: none;
+            stroke: var(--main-color);
+            stroke-width: 2;
+        }
+
+        h1 {
+            font-size: 5.5rem;
+            font-weight: 500;
+            margin: 0;
+            letter-spacing: 0.15em;
+            opacity: 0.8;
+            line-height: 1;
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            margin: 15px 0 20px;
+            font-weight: 600;
+        }
+
+        p {
+            line-height: 1.8;
+            margin-bottom: 40px;
+            font-size: 1rem;
+            color: #6d4c41;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            text-decoration: none;
+            color: var(--main-color);
+            border: 1px solid var(--main-color);
+            padding: 14px 40px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            letter-spacing: 0.1em;
+            transition: all 0.3s ease;
+            display: inline-block;
+            background-color: transparent;
+        }
+
+        .btn:hover {
+            background-color: var(--main-color);
+            color: var(--bg-color);
+        }
+
+        .message {
+            margin-top: 30px;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            opacity: 0.4;
+        }
+
+        .footer-note{
+            color: #888;
+            margin-top: 30px;
+            font-size: 0.7rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="steam-container">
+            <div class="steam" style="margin-left: -10px; animation-delay: 0s;">~</div>
+            <div class="steam" style="margin-left: 10px; animation-delay: 2s;">~</div>
+        </div>
+
+        <svg class="cup-svg" width="60" height="50" viewBox="0 0 60 50">
+            <path d="M12 8C12 4 15 4 15 4H45C45 4 48 4 48 8V32C48 40 40 45 30 45C20 45 12 40 12 32V8Z" />
+            <path d="M48 15C55 15 55 25 48 25" />
+        </svg>
+
+        <h1>404</h1>
+        <h2>Page Not Found</h2>
+        
+        <p>
+            The page you are looking for doesn't exist.<br>
+            It might have been moved or deleted.<br>
+            Please head back to our homepage.
+        </p>
+
+        <div class="btn-group">
+            <a href="/index.html" class="btn">ホームへ戻る (日本語)</a>
+            <a href="/index-en.html" class="btn">BACK TO HOME (ENGLISH)</a>
+        </div>
+        
+        <div class="message">HAVE A NICE DAY</div>
+
+        <div class="footer-note">&copy; 2026 Tatsuya Miki. All Rights Reserved.</div>
+    </div>
+</body>
+
+</html>
