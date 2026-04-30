@@ -37,11 +37,11 @@ ul {
 
 svg.icon {
   fill: currentcolor;
-  height: 1em;
-  margin-right: 0.4em;
+  height: 1.25em;
+  margin-right: 0.3em;
   overflow: visible;
-  vertical-align: -0.125em;
-  width: 1em;
+  vertical-align: -0.23em;
+  width: 1.3em;
 }
 
 /* container for layout */
