@@ -305,7 +305,7 @@ footer {
 }
 
 /* --- Responsive design for mobile devices --- */
-@media (max-width: 768px) {
+@media (max-width: 960px) {
     .hamburger {
         display: block;
         z-index: 2000;

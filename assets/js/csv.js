@@ -64,9 +64,14 @@ function stripHtml(text) {
     .trim();
 }
 
+function isJapaneseText(text) {
+  return /[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff]/.test(String(text || ""));
+}
+
 function normalizeAuthorsForDisplay(authorsRaw) {
   const names = splitAuthors(authorsRaw);
   if (names.length <= 1) return names[0] || "";
+  if (names.every(isJapaneseText)) return names.join(", ");
   if (names.length === 2) return `${names[0]} and ${names[1]}`;
   return `${names.slice(0, -1).join(", ")}, and ${names[names.length - 1]}`;
 }
@@ -228,6 +233,54 @@ function createPublicationMain(pub) {
   return main;
 }
 
+function createPresentationMain(presentation) {
+  const main = document.createElement("div");
+  main.className = "pub-main";
+  const authors = highlightMyName(normalizeAuthorsForDisplay(presentation.authorsRaw));
+  const conferenceLabel = [
+    presentation.conference,
+    presentation.number,
+    presentation.location
+  ]
+    .filter(Boolean)
+    .join(", ");
+  const presentationType = presentation.type ? `(${presentation.type})` : "";
+  const trailingMeta = presentation.presentationDate && presentationType
+    ? `${presentation.presentationDate} ${presentationType}`
+    : presentation.presentationDate || presentationType;
+  const conferenceHtml = presentation.url
+    ? `<a href="${presentation.url}" target="_blank">${conferenceLabel}</a>`
+    : conferenceLabel;
+
+  main.innerHTML =
+    `"${presentation.title}", <br>` +
+    `${authors}` +
+    `${conferenceLabel ? `, ${conferenceHtml}` : ""}` +
+    `${trailingMeta ? `, ${trailingMeta}` : ""}` +
+    `${presentation.extra ? `<br>${presentation.extra}` : ""}.`;
+
+  return main;
+}
+
+function createSeminarMain(seminar) {
+  const main = document.createElement("div");
+  main.className = "pub-main";
+  const authors = highlightMyName(normalizeAuthorsForDisplay(seminar.authorsRaw));
+  const seminarLabel = [seminar.seminar, seminar.location].filter(Boolean).join(", ");
+  const seminarHtml = seminar.url
+    ? `<a href="${seminar.url}" target="_blank">${seminarLabel}</a>`
+    : seminarLabel;
+
+  main.innerHTML =
+    `"${seminar.title}", <br>` +
+    `${authors}` +
+    `${seminarLabel ? `, ${seminarHtml}` : ""}` +
+    `${seminar.date ? `, ${seminar.date}` : ""}` +
+    `${seminar.extra ? `<br>${seminar.extra}` : ""}.`;
+
+  return main;
+}
+
 function createPublicationRecord(cols, idxMap) {
   return {
     title: getCell(cols, idxMap, "title"),
@@ -243,6 +296,43 @@ function createPublicationRecord(cols, idxMap) {
     imgFlag: truthy(getCell(cols, idxMap, "img_flag")),
     bibtex: getCell(cols, idxMap, "bibtex")
   };
+}
+
+function createPresentationRecord(cols, idxMap) {
+  return {
+    title: getCell(cols, idxMap, "title"),
+    authorsRaw: getCell(cols, idxMap, "authors"),
+    conference: getCell(cols, idxMap, "conference"),
+    number: getCell(cols, idxMap, "number"),
+    location: getCell(cols, idxMap, "location"),
+    startDate: getCell(cols, idxMap, "start_date"),
+    endDate: getCell(cols, idxMap, "end_date"),
+    presentationDate: getCell(cols, idxMap, "presentation_date"),
+    type: getCell(cols, idxMap, "type"),
+    review: getCell(cols, idxMap, "review"),
+    url: getCell(cols, idxMap, "url"),
+    extra: getCell(cols, idxMap, "extra")
+  };
+}
+
+function createSeminarRecord(cols, idxMap) {
+  return {
+    title: getCell(cols, idxMap, "title"),
+    authorsRaw: getCell(cols, idxMap, "authors"),
+    seminar: getCell(cols, idxMap, "seminar"),
+    location: getCell(cols, idxMap, "location"),
+    date: getCell(cols, idxMap, "date"),
+    url: getCell(cols, idxMap, "url"),
+    extra: getCell(cols, idxMap, "extra")
+  };
+}
+
+function isPresentationList(listId) {
+  return ["seminarList", "internationalList", "domesticList"].includes(listId);
+}
+
+function isSeminarList(listId) {
+  return listId === "seminarList";
 }
 
 function appendPublicationImage(ol, pub) {
@@ -267,18 +357,46 @@ async function loadPublicationsFromOl(olSelector) {
   }
 
   try {
-    const res = await fetch(csvPath, { cache: "no-store" });
-    if (!res.ok) throw new Error(`Failed to fetch CSV: ${csvPath} (${res.status})`);
+    const csvCandidates = [csvPath];
+    if (csvPath.includes("seminar.csv")) csvCandidates.push(csvPath.replace("seminar.csv", "seminars.csv"));
+    if (csvPath.includes("seminars.csv")) csvCandidates.push(csvPath.replace("seminars.csv", "seminar.csv"));
+
+    let res = null;
+    let lastError = null;
+    for (const candidate of csvCandidates) {
+      const currentRes = await fetch(candidate, { cache: "no-store" });
+      if (currentRes.ok) {
+        res = currentRes;
+        break;
+      }
+      lastError = new Error(`Failed to fetch CSV: ${candidate} (${currentRes.status})`);
+    }
+    if (!res) throw lastError || new Error(`Failed to fetch CSV: ${csvPath}`);
 
     const table = parseCSV(await res.text());
     if (table.length < 2) return;
 
     const idxMap = makeHeaderIndex(table[0]);
     ol.innerHTML = "";
+    const presentationMode = isPresentationList(ol.id);
+    const seminarMode = isSeminarList(ol.id);
 
-    for (let r = 1; r < table.length; r++) {
-      const pub = createPublicationRecord(table[r], idxMap);
+    for (let r = table.length - 1; r >= 1; r--) {
       const li = document.createElement("li");
+      if (presentationMode) {
+        if (seminarMode) {
+          const seminar = createSeminarRecord(table[r], idxMap);
+          li.appendChild(createSeminarMain(seminar));
+          ol.appendChild(li);
+          continue;
+        }
+        const presentation = createPresentationRecord(table[r], idxMap);
+        li.appendChild(createPresentationMain(presentation));
+        ol.appendChild(li);
+        continue;
+      }
+
+      const pub = createPublicationRecord(table[r], idxMap);
       const main = createPublicationMain(pub);
 
       let bibtex = pub.bibtex;
