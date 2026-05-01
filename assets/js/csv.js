@@ -68,6 +68,19 @@ function isJapaneseText(text) {
   return /[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff]/.test(String(text || ""));
 }
 
+function isDeadLinkMarker(text) {
+  return String(text || "").trim().toLowerCase() === "dead link";
+}
+
+function getDisplayExtra(text) {
+  return isDeadLinkMarker(text) ? "" : String(text || "").trim();
+}
+
+function hasLiveUrl(url, extra) {
+  const normalizedUrl = String(url || "").trim();
+  return Boolean(normalizedUrl) && normalizedUrl !== "#" && !isDeadLinkMarker(normalizedUrl) && !isDeadLinkMarker(extra);
+}
+
 function normalizeAuthorsForDisplay(authorsRaw) {
   const names = splitAuthors(authorsRaw);
   if (names.length <= 1) return names[0] || "";
@@ -223,12 +236,16 @@ function createPublicationMain(pub) {
   const main = document.createElement("div");
   main.className = "pub-main";
   const authors = highlightMyName(normalizeAuthorsForDisplay(pub.authorsRaw));
+  const extra = getDisplayExtra(pub.extra);
+  const journalHtml = hasLiveUrl(pub.url, pub.extra)
+    ? `<a href="${pub.url}" target="_blank">${pub.journal}${pub.volume ? ` <b>${pub.volume}</b>,` : ""}${pub.page ? ` ${pub.page}` : ""}${pub.year ? ` (${pub.year})` : ""} </a>`
+    : `${pub.journal}${pub.volume ? ` <b>${pub.volume}</b>,` : ""}${pub.page ? ` ${pub.page}` : ""}${pub.year ? ` (${pub.year})` : ""}`;
 
   main.innerHTML =
     `"${pub.title}", <br>` +
     `${authors}, ` +
-    `<a href="${pub.url}" target="_blank">${pub.journal}${pub.volume ? ` <b>${pub.volume}</b>,` : ""}${pub.page ? ` ${pub.page}` : ""}${pub.year ? ` (${pub.year})` : ""} </a>` +
-    `${pub.extra ? `<br> ${pub.extra}` : ""}.`;
+    `${journalHtml}` +
+    `${extra ? `<br> ${extra}` : ""}.`;
 
   return main;
 }
@@ -237,6 +254,7 @@ function createPresentationMain(presentation) {
   const main = document.createElement("div");
   main.className = "pub-main";
   const authors = highlightMyName(normalizeAuthorsForDisplay(presentation.authorsRaw));
+  const extra = getDisplayExtra(presentation.extra);
   const conferenceLabel = [
     presentation.conference,
     presentation.number,
@@ -248,7 +266,7 @@ function createPresentationMain(presentation) {
   const trailingMeta = presentation.presentationDate && presentationType
     ? `${presentation.presentationDate} ${presentationType}`
     : presentation.presentationDate || presentationType;
-  const conferenceHtml = presentation.url
+  const conferenceHtml = hasLiveUrl(presentation.url, presentation.extra)
     ? `<a href="${presentation.url}" target="_blank">${conferenceLabel}</a>`
     : conferenceLabel;
 
@@ -257,7 +275,7 @@ function createPresentationMain(presentation) {
     `${authors}` +
     `${conferenceLabel ? `, ${conferenceHtml}` : ""}` +
     `${trailingMeta ? `, ${trailingMeta}` : ""}` +
-    `${presentation.extra ? `<br>${presentation.extra}` : ""}.`;
+    `${extra ? `<br>${extra}` : ""}.`;
 
   return main;
 }
@@ -266,8 +284,9 @@ function createSeminarMain(seminar) {
   const main = document.createElement("div");
   main.className = "pub-main";
   const authors = highlightMyName(normalizeAuthorsForDisplay(seminar.authorsRaw));
+  const extra = getDisplayExtra(seminar.extra);
   const seminarLabel = [seminar.seminar, seminar.location].filter(Boolean).join(", ");
-  const seminarHtml = seminar.url
+  const seminarHtml = hasLiveUrl(seminar.url, seminar.extra)
     ? `<a href="${seminar.url}" target="_blank">${seminarLabel}</a>`
     : seminarLabel;
 
@@ -276,7 +295,7 @@ function createSeminarMain(seminar) {
     `${authors}` +
     `${seminarLabel ? `, ${seminarHtml}` : ""}` +
     `${seminar.date ? `, ${seminar.date}` : ""}` +
-    `${seminar.extra ? `<br>${seminar.extra}` : ""}.`;
+    `${extra ? `<br>${extra}` : ""}.`;
 
   return main;
 }
