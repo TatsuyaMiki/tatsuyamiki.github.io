@@ -95,7 +95,15 @@ function normalizeAuthorsForBibtex(authorsRaw) {
 
 function highlightMyName(authorsText) {
   if (!authorsText) return authorsText;
-  return authorsText.replace(/T\.\s*Miki/g, "<u>T. Miki</u>");
+  const myNamePatterns = [
+    { pattern: /T\.\s*Miki/g, replacement: "<u>T. Miki</u>" },
+    { pattern: /三木健矢/g, replacement: "<u>三木健矢</u>" }
+  ];
+
+  return myNamePatterns.reduce(
+    (text, { pattern, replacement }) => text.replace(pattern, replacement),
+    authorsText
+  );
 }
 
 function escapeBibtex(v) {
