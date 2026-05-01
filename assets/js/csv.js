@@ -376,21 +376,8 @@ async function loadPublicationsFromOl(olSelector) {
   }
 
   try {
-    const csvCandidates = [csvPath];
-    if (csvPath.includes("seminar.csv")) csvCandidates.push(csvPath.replace("seminar.csv", "seminars.csv"));
-    if (csvPath.includes("seminars.csv")) csvCandidates.push(csvPath.replace("seminars.csv", "seminar.csv"));
-
-    let res = null;
-    let lastError = null;
-    for (const candidate of csvCandidates) {
-      const currentRes = await fetch(candidate, { cache: "no-store" });
-      if (currentRes.ok) {
-        res = currentRes;
-        break;
-      }
-      lastError = new Error(`Failed to fetch CSV: ${candidate} (${currentRes.status})`);
-    }
-    if (!res) throw lastError || new Error(`Failed to fetch CSV: ${csvPath}`);
+    const res = await fetch(csvPath, { cache: "no-store" });
+    if (!res.ok) throw new Error(`Failed to fetch CSV: ${csvPath} (${res.status})`);
 
     const table = parseCSV(await res.text());
     if (table.length < 2) return;
