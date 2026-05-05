@@ -131,7 +131,25 @@ main {
     padding-bottom: 60px;
 }
 
+.page-content {
+    display: block;
+    width: 100%;
+    text-align: left;
+}
+
+.page-content > h1 {
+    display: inline-block;
+    margin: 40px 0 30px;
+}
+
+.page-content > section {
+    display: block;
+    width: 100%;
+}
+
 h2 {
+    display: block;
+    width: 100%;
     border-bottom: 1px solid var(--accent-color);
     padding-bottom: 10px;
     font-size: 1.5rem;
@@ -522,6 +540,10 @@ footer {
 
 /* --- Links --- */
 
+.links {
+    width: 100%;
+}
+
 .links a:hover{
     color: var(--accent-color);
 }
@@ -530,6 +552,7 @@ footer {
     margin-bottom: 10px;
     position: relative;
     padding-left: 15px;
+    width: 100%;
 }
 
 .links li::before {
@@ -635,10 +658,6 @@ footer {
 
     .en-address {
         overflow-wrap: anywhere;
-    }
-
-    .container.page-content {
-        width: 98%;
     }
 
 }
