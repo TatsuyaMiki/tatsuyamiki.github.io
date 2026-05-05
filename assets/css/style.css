@@ -618,6 +618,10 @@ footer {
         gap: 30px;
     }
 
+    .myname {
+        font-size:25px;
+    }
+
     .social-links {
         justify-content: center;
     }
