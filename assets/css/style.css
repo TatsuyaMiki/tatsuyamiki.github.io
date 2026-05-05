@@ -626,6 +626,10 @@ footer {
         font-size: 1.8rem;
     }
 
+    h2 {
+        font-size: 1.3rem;
+    }
+
     .social-links {
         justify-content: center;
     }
