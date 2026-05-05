@@ -536,6 +536,27 @@ footer {
     min-width: 550px;
 }
 
+.access-info h3 {
+    display: flex;
+    align-items: center;
+    margin: 0 0 12px;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.access-info h4 {
+    margin: 0 0 10px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--accent-color);
+}
+
+.access-info p {
+    margin: 0 0 12px;
+    font-size: 1rem;
+    overflow-wrap: anywhere;
+}
+
 .en-address {
     margin-top: 10px;
     color: #666;
