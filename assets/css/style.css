@@ -368,10 +368,15 @@ footer {
 
     .address-box {
         order: 0;
+        min-width: 0;
     }
 
     .map-container {
         order: 1;
+    }
+
+    .contact-box {
+        min-width: 0;
     }
 }
 
