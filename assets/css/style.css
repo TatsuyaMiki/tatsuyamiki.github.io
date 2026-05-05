@@ -17,6 +17,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
 a {
@@ -39,13 +40,15 @@ svg.icon {
   fill: currentcolor;
   height: 1.25em;
   margin-right: 0.3em;
-  overflow: visible;
+  overflow: hidden;
   vertical-align: -0.23em;
   width: 1.3em;
+  flex-shrink: 0;
 }
 
 /* container for layout */
 .container {
+    box-sizing: border-box;
     max-width: 960px;
     margin: 0 auto;
     padding: 0 20px;
@@ -141,14 +144,15 @@ h1 {
   font-size: 2.2rem;
   padding: 0 0.5rem;
   z-index: 1;
+  max-width: 100%;
 }
 
 h1::before {
   content: "";
   position: absolute;
   bottom: 8px;
-  left: -5px;
-  width: 105%;
+  left: 0;
+  width: 100%;
   height: 10px;
   background: var(--accent-color);
   z-index: -1;
@@ -278,7 +282,7 @@ h1::before {
 
 /* table style (CV...etc) */
 .cv-table {
-    width: 100%;
+    width: 98%;
     border-collapse: collapse;
 }
 
@@ -302,62 +306,6 @@ footer {
     font-size: 0.85rem;
     color: #888;
     border-top: 1px solid var(--border-color);
-}
-
-/* --- Responsive design for mobile devices --- */
-@media (max-width: 960px) {
-    .hamburger {
-        display: block;
-        z-index: 2000;
-    }
-
-    .main-nav {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        width: 70%;
-        height: 100vh;
-        background-color: var(--bg-color);
-        box-shadow: -2px 0 10px rgba(0,0,0,0.1);
-        transition: 0.3s;
-        padding-top: 80px;
-        z-index: 1500;
-    }
-
-    .main-nav.active {
-        right: 0;
-    }
-
-    .main-nav ul {
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
-    }
-
-    .profile-section {
-        flex-direction: column-reverse;
-        text-align: center;
-        gap: 30px;
-    }
-
-    .social-links {
-        justify-content: center;
-    }
-
-    .news-list {
-        max-height: 240px;
-    }
-    
-    .cv-table th, .cv-table td {
-        display: block;
-        width: 100%;
-    }
-    
-    .cv-table th {
-        border-bottom: none;
-        padding-bottom: 0;
-    }
-
 }
 
 
@@ -572,44 +520,7 @@ footer {
     border: 0;
 }
 
-@media (max-width: 960px) {
-    .access-info {
-        flex-direction: column;
-        gap: 24px;
-    }
-
-    .access-info > * {
-        min-width: 0;
-        width: 100%;
-        max-width: 100%;
-    }
-
-    .contact-box {
-        order: -1;
-        min-width: 0;
-    }
-
-    .address-box {
-        order: 0;
-        min-width: 0;
-    }
-
-    .map-container {
-        order: 1;
-    }
-
-    .access-info p {
-        font-size: 0.95rem;
-        line-height: 1.7;
-    }
-
-    .en-address {
-        font-size: 0.88rem;
-        overflow-wrap: anywhere;
-    }
-}
-
-/* --- Others --- */
+/* --- Links --- */
 
 .links a:hover{
     color: var(--accent-color);
@@ -619,7 +530,6 @@ footer {
     margin-bottom: 10px;
     position: relative;
     padding-left: 15px;
-    min-width: 450px;
 }
 
 .links li::before {
@@ -646,4 +556,89 @@ footer {
 
 .gallery-grid img:hover {
     opacity: 0.8;
+}
+
+/* --- Responsive design for mobile devices --- */
+@media (max-width: 960px) {
+    .hamburger {
+        display: block;
+        z-index: 2000;
+    }
+
+    .main-nav {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 70%;
+        height: 100vh;
+        background-color: var(--bg-color);
+        box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+        transform: translateX(100%);
+        transition: transform 0.3s;
+        padding-top: 80px;
+        z-index: 1500;
+    }
+
+    .main-nav.active {
+        transform: translateX(0);
+    }
+
+    .main-nav ul {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .profile-section {
+        flex-direction: column-reverse;
+        text-align: center;
+        gap: 30px;
+    }
+
+    .social-links {
+        justify-content: center;
+    }
+
+    .news-list {
+        max-height: 240px;
+    }
+    
+    .cv-table th, .cv-table td {
+        display: block;
+        width: 100%;
+    }
+    
+    .cv-table th {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .access-info {
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .contact-box {
+        order: -1;
+        min-width: 0;
+    }
+
+    .address-box {
+        order: 0;
+        min-width: 0;
+        width: 100%;
+    }
+
+    .map-container {
+        order: 1;
+    }
+
+    .en-address {
+        overflow-wrap: anywhere;
+    }
+
+    .container.page-content {
+        width: 98%;
+    }
+
 }
