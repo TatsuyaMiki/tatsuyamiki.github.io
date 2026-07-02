@@ -295,7 +295,6 @@ h2 {
 
 .news-list .news-link {
     color: var(--accent-color);
-    text-decoration: underline;
 }
 
 /* table style (CV...etc) */
