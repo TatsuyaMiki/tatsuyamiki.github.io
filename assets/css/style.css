@@ -188,7 +188,7 @@ h2 {
 .profile-section {
     display: flex;
     align-items: center;
-    gap: 50px;
+    gap: 0px;
     margin-bottom: 60px;
 }
 
@@ -209,10 +209,10 @@ h2 {
 }
 
 .profile-image img {
-    width: 250px;
-    height: 250px;
+    width: 200px;
+    height: 200px;
     object-fit: cover;
-    border-radius: 50%;
+    border-radius: 10%;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
@@ -464,21 +464,20 @@ footer {
 }
 
 /* --- Access --- */
-.access-info {
+.page-content > .access-info {
     margin-bottom: 40px;
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 40px;
+    align-items: start;
 }
 
 .contact-box {
-    flex: 1;
-    min-width: 300px;
+    min-width: 0;
 }
 
 .address-box {
-    flex: 1;
-    min-width: 550px;
+    min-width: 0;
 }
 
 .access-info h3 {
@@ -515,7 +514,7 @@ footer {
 /* map */
 .map-container {
     position: relative;
-    flex: 1 1 100%;
+    grid-column: 1 / -1;
     min-width: 0;
     width: 100%;
     max-width: 100%;
@@ -614,7 +613,7 @@ footer {
     .profile-section {
         flex-direction: column-reverse;
         text-align: center;
-        gap: 30px;
+        gap: 20px;
     }
 
     .myname {
@@ -647,24 +646,19 @@ footer {
         padding-bottom: 0;
     }
 
-    .access-info {
-        flex-direction: column;
+    .page-content > .access-info {
+        grid-template-columns: 1fr;
         gap: 24px;
     }
 
-    .contact-box {
-        order: -1;
-        min-width: 0;
-    }
-
+    .contact-box,
     .address-box {
-        order: 0;
-        min-width: 0;
         width: 100%;
     }
 
-    .map-container {
-        order: 1;
+    .contact-box p,
+    .address-box p {
+        padding-left: 15px;
     }
 
     .en-address {
