@@ -201,7 +201,7 @@ h2 {
 .profile-section {
     display: flex;
     align-items: center;
-    gap: 40px;
+    gap: 100px;
     justify-content: center;
 }
 
