@@ -201,20 +201,18 @@ h2 {
 .profile-section {
     display: flex;
     align-items: center;
-    gap: 100px;
-    justify-content: center;
-}
-
-.profile-image {
-    margin-top: 40px;
+    gap: 80px;
+    margin-left: 40px;
 }
 
 .profile-image img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.profile-image {
     width: 200px;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 10%;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin-top: 40px;
 }
 
 /* social links */
@@ -617,8 +615,8 @@ footer {
     }
 
     .profile-section {
-        flex-direction: column-reverse;
-        text-align: center;
+        flex-direction: column;
+        text-align: left;
         gap: 20px;
     }
 
